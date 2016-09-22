@@ -19,89 +19,93 @@ local widget = require "widget"
 
 -- forward declarations and other locals
 local playBtn
-
--- 'onRelease' event listener for playBtn
-local function onPlayBtnRelease()
-	
-	composer.gotoScene( "game", "fade", 500 )
-	
-	return true	-- indicates successful touch
-end
-
 function scene:create( event )
-	local sceneGroup = self.view
+    local sceneGroup = self.view
+    
+    -- display a background image
+    local background = display.newImageRect( "Images/background.jpg", display.actualContentWidth, display.actualContentHeight )
+    background.anchorX = 0
+    background.anchorY = 0
+    background.x = 0 + display.screenOriginX 
+    background.y = 0 + display.screenOriginY
+    
+    -- create/position logo/title image on upper-half of the screen
+    local titleLogo = display.newText("Space Attack", display.contentCenterX, display.contentWidth / 4, "Fonts/good times rg.ttf", 30)
+    titleLogo.x = display.contentCenterX
+    titleLogo.y = 150
+    
+    -- create a widget button which will load the game
+    -- 'onRelease' event listener for playBtn
+    local function onPlayBtnRelease()
+        composer.gotoScene( "game", "fade", 500 )
+        return true
+    end
+    playBtn = widget.newButton{
+        label="Play",
+        labelColor = { default={255}, over={128} },
+        width=154, height=40,
+        font="Fonts/good times rg.ttf",
+        onRelease = onPlayBtnRelease	-- event listener function
+        
+    }
+    playBtn._view._label.size = 30
+    playBtn.x = display.contentCenterX
+    playBtn.y = display.contentHeight - 125
 
-	-- display a background image
-	local background = display.newImageRect( "Images/background.jpg", display.actualContentWidth, display.actualContentHeight )
-	background.anchorX = 0
-	background.anchorY = 0
-	background.x = 0 + display.screenOriginX 
-	background.y = 0 + display.screenOriginY
-	
-	-- create/position logo/title image on upper-half of the screen
-	local titleLogo = display.newText("Space Attack", display.contentCenterX, display.contentWidth / 4, "Fonts/good times rg.ttf", 30)
-	titleLogo.x = display.contentCenterX
-	titleLogo.y = 150
-	
-	-- create a widget button which will load the game
-	playBtn = widget.newButton{
-		label="Play",
-		labelColor = { default={255}, over={128} },
-		width=154, height=40,
-		font="Fonts/good times rg.ttf",
-		onRelease = onPlayBtnRelease	-- event listener function
+    local creator = display.newText("© 2016 Olivia Gorton", display.contentCenterX, display.contentWidth / 4, "Fonts/Arial Narrow.ttf", 12)
+    creator.x = display.contentCenterX
+    creator.y = 500
 
-	}
-	playBtn._view._label.size = 30
-	playBtn.x = display.contentCenterX
-	playBtn.y = display.contentHeight - 125
-	
-	-- all display objects must be inserted into group
-	sceneGroup:insert( background )
-	sceneGroup:insert( titleLogo )
-	sceneGroup:insert( playBtn )
+    local sprites = display.newText("Sprites by MillionthVector", display.contentCenterX, display.contentWidth / 4, "Fonts/Arial Narrow.ttf", 12)
+    sprites.x = display.contentCenterX
+    sprites.y = 515
+
+    -- all display objects must be inserted into group
+    sceneGroup:insert( background )
+    sceneGroup:insert( titleLogo )
+    sceneGroup:insert( playBtn )
 end
 
 function scene:show( event )
-	local sceneGroup = self.view
-	local phase = event.phase
-	
-	if phase == "will" then
-		-- Called when the scene is still off screen and is about to move on screen
-	elseif phase == "did" then
-		-- Called when the scene is now on screen
-		-- 
-		-- INSERT code here to make the scene come alive
-		-- e.g. start timers, begin animation, play audio, etc.
-	end	
+    local sceneGroup = self.view
+    local phase = event.phase
+    
+    if phase == "will" then
+        -- Called when the scene is still off screen and is about to move on screen
+    elseif phase == "did" then
+        -- Called when the scene is now on screen
+        -- 
+        -- INSERT code here to make the scene come alive
+        -- e.g. start timers, begin animation, play audio, etc.
+    end	
 end
 
 function scene:hide( event )
-	local sceneGroup = self.view
-	local phase = event.phase
-	
-	if event.phase == "will" then
-		-- Called when the scene is on screen and is about to move off screen
-		--
-		-- INSERT code here to pause the scene
-		-- e.g. stop timers, stop animation, unload sounds, etc.)
-	elseif phase == "did" then
-		-- Called when the scene is now off screen
-	end	
+    local sceneGroup = self.view
+    local phase = event.phase
+    
+    if event.phase == "will" then
+        -- Called when the scene is on screen and is about to move off screen
+        --
+        -- INSERT code here to pause the scene
+        -- e.g. stop timers, stop animation, unload sounds, etc.)
+    elseif phase == "did" then
+        -- Called when the scene is now off screen
+    end	
 end
 
 function scene:destroy( event )
-	local sceneGroup = self.view
-	
-	-- Called prior to the removal of scene's "view" (sceneGroup)
-	-- 
-	-- INSERT code here to cleanup the scene
-	-- e.g. remove display objects, remove touch listeners, save state, etc.
-	
-	if playBtn then
-		playBtn:removeSelf()	-- widgets must be manually removed
-		playBtn = nil
-	end
+    local sceneGroup = self.view
+    
+    -- Called prior to the removal of scene's "view" (sceneGroup)
+    -- 
+    -- INSERT code here to cleanup the scene
+    -- e.g. remove display objects, remove touch listeners, save state, etc.
+    
+    if playBtn then
+        playBtn:removeSelf()	-- widgets must be manually removed
+        playBtn = nil
+    end
 end
 
 ---------------------------------------------------------------------------------
