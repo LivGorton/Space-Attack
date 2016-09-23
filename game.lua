@@ -196,8 +196,8 @@ function collisionEvent(event)
                 killObj(obj2)
             end
             
-            if lives == 0 then
-                composer.gotoScene("menu", "fade", 500)
+            if lives == 1 then
+                composer.gotoScene("menu")
             else
                 lives = lives - 1
                 lifeCount.text = lives
@@ -361,7 +361,7 @@ function scene:hide( event )
         
         -- disable physics
         player:removeEventListener("collision", collisionEvent)
-        physics.stop()
+        timer.performWithDelay( 50, function() physics.stop(); end )
         
     elseif phase == "did" then
         -- Called when the scene is now off screen
